@@ -5,11 +5,13 @@ export default function RegisterForm() {
   const [fname, setFname] = useState("");
   const [fnameError, setFnameError] = useState(false);
   const [lname, setLname] = useState("");
+  const [lnameError, setLnameError] = useState(false);
   const [plan, setPlan] = useState("");
   const [gender, setGender] = useState("");
   const [buyBottle, setBuyBottle] = useState(false);
   const [buyShoes, setBuyShoes] = useState(false);
   const [buyCap, setBuyCap] = useState(false);
+  const [isGenderOK, setGenderOK] = useState(false);
 
   // ----------------------------------------------------------------
 
@@ -58,6 +60,8 @@ export default function RegisterForm() {
     if (buyShoes) total += 600;
     if (buyCap) total += 400;
 
+    if(buyBottle && buyShoes && buyCap) total*= 0.8
+
     return total;
   };
 
@@ -68,6 +72,16 @@ export default function RegisterForm() {
     if (fname === "") {
       fnameOk = false;
       setFnameError(true);
+    }
+
+    let lnameOK = true;
+    if(lname === ""){
+      lnameOK = false;
+      setLnameError(true);
+    }
+    let isGenderOK = true;
+    if(gender === ""){
+      isGenderOK = false;
     }
 
     if (fnameOk) {
@@ -94,7 +108,7 @@ export default function RegisterForm() {
         <div>
           <label className="form-label">Last name</label>
           <input
-            className="form-control"
+            className={"form-control" + (lnameError ? " is-invalid" : "")} 
             onChange={inputLnameOnChange}
             value={lname}
           />
@@ -139,7 +153,7 @@ export default function RegisterForm() {
           Female 👩
           {/* To show error when user did not select gender, */}
           {/* We just have to render the div below (Not using is-invalid bootstrap class) */}
-          {/* <div className="text-danger">Please select gender</div> */}
+          <div className="text-danger" >Please select gender</div> 
         </div>
       </div>
 
@@ -196,8 +210,7 @@ export default function RegisterForm() {
       <button
         className="btn btn-success my-2"
         onClick={registerBtnOnClick}
-        //You can embbed a state like below to disabled the button
-        //disabled={isUserAgreed}
+        disabled={isUserAgreed}
       >
         Register
       </button>
